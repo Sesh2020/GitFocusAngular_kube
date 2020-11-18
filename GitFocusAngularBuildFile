@@ -55,6 +55,18 @@ pipeline {
                    }
             }    
     }
+      stage('Push to DockerHub') {
+	  
+            steps{
+                  script {
+                            docker.withRegistry( '', registryCredential ) {
+                            dockerImage.push();
+			    dockerImage.push()+ ':${BUILD_NUMBER}'
+                           }
+                  }
+             }
+        }
+	}
     /* post {
           always {
 	          cleanWs() 
