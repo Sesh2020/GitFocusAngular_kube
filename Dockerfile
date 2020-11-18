@@ -1,5 +1,5 @@
 FROM node
 USER root
 RUN npm install
-EXPOSE 4200
+EXPOSE 4202
 CMD [ "node", "app.js" ]
