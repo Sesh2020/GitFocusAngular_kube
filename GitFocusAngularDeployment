@@ -11,7 +11,7 @@ pipeline {
   }	
  
   stages {
-         /* stage ("Build Project") {
+          stage ("Build Project") {
                steps {
 	                   build 'GitFocus-Angular-Build'
                 }  
@@ -30,7 +30,7 @@ pipeline {
 		                          }
                      }
                 }    
-           } */
+           } 
            stage('Deploy in Cluster') {
             steps {
                  script {
