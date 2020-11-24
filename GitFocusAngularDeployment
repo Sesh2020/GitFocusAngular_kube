@@ -11,16 +11,71 @@ pipeline {
   }	
  
   stages {
-          stage ("Build Project") {
-               steps {
-	                   build 'GitFocus-Angular-Build'
-                }  
-          } 
-	  stage ("Push Image") {
-               steps {
-	                    build 'GitFocus-Angular-BuildImage'
-                }  
-          }  
+stage('Initialize'){
+            steps {		    
+                    nodejs('DAGNodeJS'){
+                          sh 'npm install'
+                          sh 'cp  index.d.ts ./node_modules/@types/chart.js'
+                    }
+            }
+        }
+        stage('Build') {
+            steps {
+                    nodejs('DAGNodeJS'){
+                        sh 'npm run-script build'
+                    }
+            }
+        }
+	stage ("Code Analysis") {	   
+            steps {
+	            script {
+	                      def scannerHome=tool 'DAGSonarQubeScanner'
+		              withSonarQubeEnv('SonarQube') {    
+	                         sh 'pwd'  
+	                         //sh 'cp sonar-scanner.properties /var/jenkins_home/sonar-scanner-4.4.0.2170-linux/conf'
+		                 //sh '/var/jenkins_home/sonar-scanner-4.4.0.2170-linux/bin/sonar-scanner'
+				 sh "cp sonar-scanner.properties ${scannerHome}/conf"
+		                 sh "${scannerHome}/bin/sonar-scanner"
+	                      }
+		    }
+            }
+        }
+	stage("Quality Check"){
+            steps{
+	                script{
+      			               def qualitygate = waitForQualityGate()
+      			               if (qualitygate.status != "OK") {
+         		                   error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
+			                     }
+	     	          }
+            }
+        }
+		        stage('Building Image') {	  
+            steps {
+	            sh 'pwd'
+	            sh 'ls -l'
+                   script {
+                            dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                            //dockerImage = docker.build registry + ":1.1"
+                   }
+            }           
+        }	
+        stage('Clean Up'){
+            steps {
+                sh 'rm -r src output  e2e'
+                sh 'rm -f browserslist tsconfig.app.json README.md tsconfig.json angular.json  tsconfig.spec.json karma.conf.js  tslint.json index.d.ts'
+            }
+        }	
+        stage('Push to DockerHub') {
+            steps{
+                  script {
+                            docker.withRegistry( '', registryCredential ) {
+                            dockerImage.push();
+			    dockerImage.push()+ ':${BUILD_NUMBER}'
+                           }
+                  }
+             }
+        }
           stage('Approval') {            
                steps {
                     script {
