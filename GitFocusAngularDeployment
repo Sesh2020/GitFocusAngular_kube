@@ -69,7 +69,6 @@ stage('Initialize'){
         stage('Push to ECR') {
             steps{
                   script {
-		  	sh '$(aws ecr get-login)'
                             docker.withRegistry( '792429589635.dkr.ecr.ap-south-1.amazonaws.com/gitfocus', registryCredential ) {
                             dockerImage.push();
 			    dockerImage.push()+ ':${BUILD_NUMBER}'
