@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "http://792429589635.dkr.ecr.ap-south-1.amazonaws.com/gitfocus"
+    registry = "792429589635.dkr.ecr.ap-south-1.amazonaws.com/gitfocus"
     registryCredential = 'AWS_Cred'
     dockerImage = ''
   }
