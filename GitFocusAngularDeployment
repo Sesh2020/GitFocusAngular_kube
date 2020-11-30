@@ -1,7 +1,7 @@
 pipeline {
   environment {
-    registry = "priya2802/gitfocus_service_kube"
-    registryCredential = 'GITFocus-DockerHub'
+    registry = "792429589635.dkr.ecr.ap-south-1.amazonaws.com/gitfocus"
+    registryCredential = 'AWS_Cred'
     dockerImage = ''
   }
  
@@ -66,7 +66,7 @@ stage('Initialize'){
                 sh 'rm -f browserslist tsconfig.app.json README.md tsconfig.json angular.json  tsconfig.spec.json karma.conf.js  tslint.json index.d.ts'
             }
         }	
-        stage('Push to DockerHub') {
+        stage('Push to ECR') {
             steps{
                   script {
                             docker.withRegistry( '', registryCredential ) {
@@ -76,7 +76,7 @@ stage('Initialize'){
                   }
              }
         }
-          stage('Approval') {            
+         /* stage('Approval') {            
                steps {
                     script {
 		                          timeout (time: 10, unit: 'MINUTES') {
@@ -104,7 +104,7 @@ stage('Initialize'){
                      }
                  }
             }
-        }
+        }*/
    }
     post {
           always {
