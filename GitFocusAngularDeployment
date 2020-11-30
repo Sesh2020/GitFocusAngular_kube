@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "792429589635.dkr.ecr.ap-south-1.amazonaws.com/gitfocus"
+    //registry = "792429589635.dkr.ecr.ap-south-1.amazonaws.com/gitfocus"
     registryCredential = 'AWS_Cred'
     dockerImage = ''
   }
@@ -71,9 +71,10 @@ pipeline {
                   script {
 		           
                             docker.withRegistry( '792429589635.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:ap-south-1:AWS_Cred' ) {
-			     print 'cred' + AWS_Cred
+			     print 'hello'
+			     echo 'hello'
                            // dockerImage.push();
-			    dockerImage.push()+ ':${BUILD_NUMBER}'
+			    //dockerImage.push()+ ':${BUILD_NUMBER}'
                            }
                   }
              }
