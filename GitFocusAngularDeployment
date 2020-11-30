@@ -11,7 +11,7 @@ pipeline {
   }	
  
   stages {
-stage('Initialize'){
+/*stage('Initialize'){
             steps {		    
                     nodejs('DAGNodeJS'){
                           sh 'npm install'
@@ -65,12 +65,13 @@ stage('Initialize'){
                 sh 'rm -r src output  e2e'
                 sh 'rm -f browserslist tsconfig.app.json README.md tsconfig.json angular.json  tsconfig.spec.json karma.conf.js  tslint.json index.d.ts'
             }
-        }	
+        }	*/
         stage('Push to ECR') {
             steps{
                   script {
-		            print 'cred' + AWS_Cred
+		           
                             docker.withRegistry( '792429589635.dkr.ecr.ap-south-1.amazonaws.com/gitfocus', 'ecr:ap-south-1:AWS_Cred' ) {
+			     print 'cred' + AWS_Cred
                            // dockerImage.push();
 			    dockerImage.push()+ ':${BUILD_NUMBER}'
                            }
