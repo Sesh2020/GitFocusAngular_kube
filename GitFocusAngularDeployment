@@ -70,7 +70,7 @@ pipeline {
             steps{
                   script {
 		           
-                            docker.withRegistry( '792429589635.dkr.ecr.ap-south-1.amazonaws.com/gitfocus', 'ecr:ap-south-1:AWS_Cred' ) {
+                            docker.withRegistry( '792429589635.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:ap-south-1:AWS_Cred' ) {
 			     print 'cred' + AWS_Cred
                            // dockerImage.push();
 			    dockerImage.push()+ ':${BUILD_NUMBER}'
